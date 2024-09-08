@@ -11,11 +11,9 @@ public class CategoryPost
 
     public static IResult Action(CategoryRequest request, ApplicationDbContext context)
     {
-        var category = new Category(request.Name)
+        var category = new Category(request.Name, "admin", "admin")
         {
-            CreatedBy = "admin",
             CreatedOn = DateTime.Now,
-            EditedBy = "admin",
             EditedOn = DateTime.Now
         };
 

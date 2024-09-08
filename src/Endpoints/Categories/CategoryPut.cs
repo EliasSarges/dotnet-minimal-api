@@ -5,7 +5,7 @@ namespace IWantApp.Endpoints.Categories;
 
 public class CategoryPut
 {
-    public static string Template => "/categories/{id}";
+    public static string Template => "/categories/{id:guid}";
     public static string[] Methods => new[] { HttpMethod.Put.ToString() };
     public static Delegate Handle => Action;
 
@@ -16,7 +16,15 @@ public class CategoryPut
 
         if (category == null) return Results.NotFound();
 
-        if (!category.IsValid) return Results.BadRequest(category.Notifications);
+        if (!category.IsValid)
+        {
+            var errors = category.Notifications
+                .GroupBy(group => group.Key)
+                .ToDictionary(group => group.Key,
+                    group => group.Select(item => item.Message).ToArray());
+
+            return Results.ValidationProblem(errors);
+        }
 
         category.Name = request.Name;
         category.Active = request.Active;

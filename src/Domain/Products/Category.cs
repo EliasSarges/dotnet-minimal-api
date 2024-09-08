@@ -4,14 +4,20 @@ namespace IWantApp.Domain.Products;
 
 public class Category : Entity
 {
-    public Category(string name)
+    public Category(string name, string createdBy, string editedBy)
     {
         var contract = new Contract<Category>();
         contract.IsNotNull(name, "Name");
+        contract.IsNotNull(editedBy, "EditedBy");
+        contract.IsNotNull(createdBy, "CreatedBy");
 
         AddNotifications(contract);
 
         Name = name;
+        CreatedBy = createdBy;
+        EditedBy = editedBy;
+        CreatedOn = DateTime.Now;
+        EditedOn = DateTime.Now;
         Active = true;
     }
 
