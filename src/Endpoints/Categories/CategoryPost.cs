@@ -11,14 +11,15 @@ public class CategoryPost
 
     public static IResult Action(CategoryRequest request, ApplicationDbContext context)
     {
-        var category = new Category
+        var category = new Category(request.Name)
         {
-            Name = request.Name,
             CreatedBy = "admin",
             CreatedOn = DateTime.Now,
             EditedBy = "admin",
             EditedOn = DateTime.Now
         };
+
+        if (!category.IsValid) return Results.BadRequest(category.Notifications);
 
         context.Categories.Add(category);
         context.SaveChanges();

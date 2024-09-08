@@ -24,6 +24,8 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+obj/
+bin/
 
 # Uncomment if needed
 # [Ww]wwroot/

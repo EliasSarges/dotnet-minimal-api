@@ -16,6 +16,8 @@ public class CategoryPut
 
         if (category == null) return Results.NotFound();
 
+        if (!category.IsValid) return Results.BadRequest(category.Notifications);
+
         category.Name = request.Name;
         category.Active = request.Active;
         context.SaveChanges();
