@@ -17,7 +17,8 @@ public class CategoryPost
             EditedOn = DateTime.Now
         };
 
-        if (!category.IsValid) return Results.BadRequest(category.Notifications);
+        if (!category.IsValid)
+            return Results.ValidationProblem(category.Notifications.ConvertToProblemDetails());
 
         context.Categories.Add(category);
         context.SaveChanges();
