@@ -16,15 +16,7 @@ public class CategoryPut
 
         if (category == null) return Results.NotFound();
 
-        if (!category.IsValid)
-        {
-            var errors = category.Notifications
-                .GroupBy(group => group.Key)
-                .ToDictionary(group => group.Key,
-                    group => group.Select(item => item.Message).ToArray());
-
-            return Results.ValidationProblem(errors);
-        }
+        if (!category.IsValid) return Results.ValidationProblem(category.Notifications.ConvertToProblemDetails());
 
         category.Name = request.Name;
         category.Active = request.Active;

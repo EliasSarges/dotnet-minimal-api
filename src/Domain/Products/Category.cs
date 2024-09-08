@@ -7,7 +7,7 @@ public class Category : Entity
     public Category(string name, string createdBy, string editedBy)
     {
         var contract = new Contract<Category>();
-        contract.IsNotNull(name, "Name");
+        contract.IsNotNullOrEmpty(name, "Name");
         contract.IsNotNull(editedBy, "EditedBy");
         contract.IsNotNull(createdBy, "CreatedBy");
 
