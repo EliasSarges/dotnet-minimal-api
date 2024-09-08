@@ -9,7 +9,7 @@ public class CategoryPost
     public static string[] Methods => new[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(CategoryDTO request, ApplicationDbContext context)
+    public static IResult Action(CategoryRequest request, ApplicationDbContext context)
     {
         var category = new Category
         {

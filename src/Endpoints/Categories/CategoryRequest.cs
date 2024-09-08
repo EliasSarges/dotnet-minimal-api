@@ -1,6 +1,6 @@
 namespace IWantApp.Endpoints.Categories;
 
-public class CategoryDTO
+public class CategoryRequest
 {
     public string Name { get; set; }
 }
