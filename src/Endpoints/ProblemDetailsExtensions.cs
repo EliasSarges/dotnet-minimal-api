@@ -1,4 +1,5 @@
 using Flunt.Notifications;
+using Microsoft.AspNetCore.Identity;
 
 namespace IWantApp.Endpoints;
 
@@ -11,5 +12,16 @@ public static class ProblemDetailsExtensions
             .GroupBy(group => group.Key)
             .ToDictionary(group => group.Key,
                 group => group.Select(item => item.Message).ToArray());
+    }
+
+    public static Dictionary<string, string[]> ConvertToProblemDetails(
+        this IEnumerable<IdentityError> errors)
+    {
+        var dictionary = new Dictionary<string, string[]>();
+
+        dictionary.Add("Error", errors
+            .Select(e => e.Description).ToArray());
+
+        return dictionary;
     }
 }
