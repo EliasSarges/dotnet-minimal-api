@@ -1,5 +1,4 @@
-using Dapper;
-using Microsoft.Data.SqlClient;
+using IWantApp.Domain.Infra.Data;
 
 namespace IWantApp.Endpoints.Employees;
 
@@ -9,7 +8,7 @@ public static class EmployeeGetAll
     public static string[] Methods => new[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    private static IResult Action(int? page, int? rows, IConfiguration configuration)
+    private static IResult Action(int? page, int? rows, QueryAllUsersWithClaimName query)
     {
         Dictionary<string, string[]> error = new();
 
@@ -25,18 +24,6 @@ public static class EmployeeGetAll
             return Results.ValidationProblem(error);
         }
 
-        var db = new SqlConnection(configuration["ConnectionStrings:DefaultConnection"]);
-
-        var query = @"select U.Email,
-                     UC.ClaimValue as Name
-            from AspNetUsers U
-                     inner join AspNetUserClaims UC on UC.UserId = U.Id
-            where UC.ClaimType = 'Name'
-            order by 1
-            offset (@page - 1) * @rows rows fetch next @rows rows only";
-
-        var employees = db.Query<EmployeeResponse>(query, new { page, rows });
-
-        return Results.Ok(employees);
+        return Results.Ok(query.Execute(page.Value, rows.Value));
     }
 }
