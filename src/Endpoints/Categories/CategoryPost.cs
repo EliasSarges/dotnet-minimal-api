@@ -1,5 +1,7 @@
-﻿using IWantApp.Domain.Infra.Data;
+﻿using System.Security.Claims;
+using IWantApp.Domain.Infra.Data;
 using IWantApp.Domain.Products;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IWantApp.Endpoints.Categories;
 
@@ -9,9 +11,12 @@ public class CategoryPost
     public static string[] Methods => new[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(CategoryRequest request, ApplicationDbContext context)
+    [Authorize(Policy = "EmployeePolicy")]
+    public static IResult Action(CategoryRequest request, ApplicationDbContext context, HttpContext httpContext)
     {
-        var category = new Category(request.Name, "admin", "admin")
+        var userId = httpContext.User.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
+        var category = new Category(request.Name, userId, userId)
         {
             CreatedOn = DateTime.Now,
             EditedOn = DateTime.Now
