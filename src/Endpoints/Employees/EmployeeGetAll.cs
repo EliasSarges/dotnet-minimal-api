@@ -1,4 +1,5 @@
 using IWantApp.Domain.Infra.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IWantApp.Endpoints.Employees;
 
@@ -8,6 +9,7 @@ public static class EmployeeGetAll
     public static string[] Methods => new[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
+    [Authorize(Policy = "EmployeePolicy")]
     private static IResult Action(int? page, int? rows, QueryAllUsersWithClaimName query)
     {
         Dictionary<string, string[]> error = new();

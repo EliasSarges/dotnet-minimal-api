@@ -26,16 +26,22 @@ public class TokenPost
             return Results.Unauthorized();
 
         var key = Encoding.ASCII.GetBytes(configuration["JwtBearerTokenSettings:Secret"]);
+
+        var claims = userManager.GetClaimsAsync(user).Result;
+        var subject = new ClaimsIdentity(new Claim[]
+        {
+            new(ClaimTypes.Email, request.Email),
+            new(ClaimTypes.NameIdentifier, user.Id)
+        });
+        subject.AddClaims(claims);
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new(ClaimTypes.Email, request.Email)
-            }),
+            Subject = subject,
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            Audience = "IWantApp",
-            Issuer = "Issuer"
+            Audience = configuration["JwtBearerTokenSettings:Audience"],
+            Issuer = configuration["JwtBearerTokenSettings:Issuer"]
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
