@@ -14,12 +14,7 @@ public class CategoryGet
             .ToList();
 
         var response = categories
-            .Select(category => new CategoryResponse
-            {
-                Id = category.Id,
-                Name = category.Name,
-                Active = category.Active
-            });
+            .Select(category => new CategoryResponse(category.Id, category.Name, category.Active));
 
         return Results.Ok(response);
     }
