@@ -10,7 +10,7 @@ public static class EmployeeGetAll
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    private static IResult Action(int? page, int? rows, QueryAllUsersWithClaimName query)
+    private static async Task<IResult> Action(int? page, int? rows, QueryAllUsersWithClaimName query)
     {
         Dictionary<string, string[]> error = new();
 
@@ -26,6 +26,8 @@ public static class EmployeeGetAll
             return Results.ValidationProblem(error);
         }
 
-        return Results.Ok(query.Execute(page.Value, rows.Value));
+        var result = await query.Execute(page.Value, rows.Value);
+
+        return Results.Ok(result);
     }
 }

@@ -11,7 +11,7 @@ public class EmployeePost
     public static Delegate Handle => Action;
 
     [Authorize(Policy = "EmployeePolicy")]
-    public static IResult Action(EmployeeRequest request, UserManager<IdentityUser> userManager,
+    public static async Task<IResult> Action(EmployeeRequest request, UserManager<IdentityUser> userManager,
         HttpContext httpContext)
     {
         var userId = httpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -22,7 +22,7 @@ public class EmployeePost
             Email = request.Email
         };
 
-        var result = userManager.CreateAsync(user, request.Password).Result;
+        var result = await userManager.CreateAsync(user, request.Password);
 
         var userClaims = new List<Claim>
         {
@@ -32,9 +32,7 @@ public class EmployeePost
             new("CreatedOn", DateTime.Now.ToString())
         };
 
-        var claimResult = userManager
-            .AddClaimsAsync(user, userClaims)
-            .Result;
+        var claimResult = await userManager.AddClaimsAsync(user, userClaims);
 
         if (!result.Succeeded || !claimResult.Succeeded)
             return Results.ValidationProblem(result.Errors.ConvertToProblemDetails());

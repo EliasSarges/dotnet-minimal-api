@@ -14,20 +14,20 @@ public class TokenPost
     public static Delegate Handle => Action;
 
     [AllowAnonymous]
-    public static IResult Action(LoginRequest request, UserManager<IdentityUser> userManager,
+    public static async Task<IResult> Action(LoginRequest request, UserManager<IdentityUser> userManager,
         IConfiguration configuration)
     {
-        var user = userManager.FindByEmailAsync(request.Email).Result;
+        var user = await userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
             return Results.NotFound();
 
-        if (!userManager.CheckPasswordAsync(user, request.Password).Result)
+        if (!await userManager.CheckPasswordAsync(user, request.Password))
             return Results.Unauthorized();
 
         var key = Encoding.ASCII.GetBytes(configuration["JwtBearerTokenSettings:Secret"]);
 
-        var claims = userManager.GetClaimsAsync(user).Result;
+        var claims = await userManager.GetClaimsAsync(user);
         var subject = new ClaimsIdentity(new Claim[]
         {
             new(ClaimTypes.Email, request.Email),
