@@ -108,4 +108,7 @@ app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle)
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
 app.MapMethods(TokenPost.Template, TokenPost.Methods, TokenPost.Handle);
 
+app.UseExceptionHandler("/error");
+app.Map("/error", (HttpContext httpContext) => { return Results.Problem("Internal Server Error", statusCode: 500); });
+
 app.Run();
