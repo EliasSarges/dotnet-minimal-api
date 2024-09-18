@@ -8,14 +8,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, config) =>
+{
+    config.WriteTo.Console()
+        .WriteTo.MSSqlServer(
+            context.Configuration["ConnectionStrings:DefaultConnection"],
+            new MSSqlServerSinkOptions
+            {
+                AutoCreateSqlTable = true,
+                TableName = "Logs"
+            }
+        );
+});
 builder.Services
     .AddSqlServer<ApplicationDbContext>(builder.Configuration["ConnectionStrings:DefaultConnection"]);
 builder.Services
     .AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
 builder.Services.AddAuthorization(options =>
     {
         options.FallbackPolicy = new AuthorizationPolicyBuilder()
