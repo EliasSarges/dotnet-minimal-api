@@ -15,7 +15,7 @@ public class TokenPost
 
     [AllowAnonymous]
     public static async Task<IResult> Action(LoginRequest request, UserManager<IdentityUser> userManager,
-        IConfiguration configuration)
+        IConfiguration configuration, ILogger<TokenPost> logger)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
@@ -49,6 +49,7 @@ public class TokenPost
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
+        logger.LogInformation("Generated JWT Token {User}", user.Id);
 
         return Results.Ok(new { token = tokenHandler.WriteToken(token) });
     }
