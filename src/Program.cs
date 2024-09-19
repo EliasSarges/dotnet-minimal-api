@@ -2,6 +2,7 @@ using System.Text;
 using IWantApp.Domain.Infra.Data;
 using IWantApp.Endpoints.Categories;
 using IWantApp.Endpoints.Employees;
+using IWantApp.Endpoints.Products;
 using IWantApp.Endpoints.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -120,8 +121,9 @@ app.MapMethods(CategoryPut.Template, CategoryPut.Methods, CategoryPut.Handle);
 app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle);
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
 app.MapMethods(TokenPost.Template, TokenPost.Methods, TokenPost.Handle);
+app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
 
 app.UseExceptionHandler("/error");
-app.Map("/error", (HttpContext httpContext) => { return Results.Problem("Internal Server Error", statusCode: 500); });
+app.Map("/error", (HttpContext httpContext) => Results.Problem("Internal Server Error", statusCode: 500));
 
 app.Run();

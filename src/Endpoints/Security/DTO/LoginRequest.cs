@@ -1,3 +1,3 @@
-namespace IWantApp.Endpoints.Security;
+namespace IWantApp.Endpoints.Security.DTO;
 
 public record LoginRequest(string Email, string Password);

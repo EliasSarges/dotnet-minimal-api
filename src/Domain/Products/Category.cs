@@ -16,6 +16,10 @@ public class Category : Entity
         Validate();
     }
 
+    public Category()
+    {
+    }
+
     public string Name { get; private set; }
     public bool Active { get; private set; }
 

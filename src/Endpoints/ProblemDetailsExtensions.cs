@@ -17,10 +17,13 @@ public static class ProblemDetailsExtensions
     public static Dictionary<string, string[]> ConvertToProblemDetails(
         this IEnumerable<IdentityError> errors)
     {
-        var dictionary = new Dictionary<string, string[]>();
-
-        dictionary.Add("Error", errors
-            .Select(e => e.Description).ToArray());
+        var dictionary = new Dictionary<string, string[]>
+        {
+            {
+                "Error", errors
+                    .Select(e => e.Description).ToArray()
+            }
+        };
 
         return dictionary;
     }

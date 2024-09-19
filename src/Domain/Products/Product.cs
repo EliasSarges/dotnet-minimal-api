@@ -1,6 +1,6 @@
 ﻿using Flunt.Validations;
-using IWantApp.Domain;
-using IWantApp.Domain.Products;
+
+namespace IWantApp.Domain.Products;
 
 public class Product : Entity
 {
@@ -15,24 +15,29 @@ public class Product : Entity
         EditedBy = createdBy;
         CreatedOn = DateTime.Now;
         EditedOn = DateTime.Now;
+        CategoryId = category.Id;
 
         Validate();
+    }
+
+    public Product()
+    {
     }
 
     public string Name { get; private set; }
     public string Description { get; private set; }
     public bool HasStock { get; private set; }
-    public Guid CategoryId { get; }
+    public Guid CategoryId { get; private set; }
     public Category Category { get; private set; }
     public bool Active { get; private set; } = true;
 
     public void Validate()
     {
         var contract = new Contract<Product>()
-            .IsNullOrEmpty(Name, "Name")
+            .IsNotNullOrEmpty(Name, "Name")
             .IsGreaterOrEqualsThan(Name, 3, "Name")
             .IsNotNull(Category, "Category")
-            .IsNullOrEmpty(Description, "Description")
+            .IsNotNullOrEmpty(Description, "Description")
             .IsGreaterOrEqualsThan(Description, 3, "Description")
             .IsNotNullOrEmpty(CreatedBy, "CreatedBy")
             .IsNotNullOrEmpty(EditedBy, "EditedBy");
