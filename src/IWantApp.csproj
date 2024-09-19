@@ -24,6 +24,7 @@
 
     <ItemGroup>
         <Folder Include="Domain\Products\"/>
+        <Folder Include="Endpoints\Employees\DTO\" />
     </ItemGroup>
 
 </Project>

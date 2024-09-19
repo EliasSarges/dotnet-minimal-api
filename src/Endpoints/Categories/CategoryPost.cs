@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using IWantApp.Domain.Infra.Data;
 using IWantApp.Domain.Products;
+using IWantApp.Endpoints.Categories.DTO;
 using Microsoft.AspNetCore.Authorization;
 
 namespace IWantApp.Endpoints.Categories;
@@ -17,11 +18,7 @@ public class CategoryPost
     {
         var userId = httpContext.User.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
 
-        var category = new Category(request.Name, userId, userId)
-        {
-            CreatedOn = DateTime.Now,
-            EditedOn = DateTime.Now
-        };
+        var category = new Category(request.Name, userId);
 
         if (!category.IsValid)
             return Results.ValidationProblem(category.Notifications.ConvertToProblemDetails());

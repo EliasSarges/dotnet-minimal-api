@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using IWantApp.Domain.Infra.Data;
+using IWantApp.Endpoints.Categories.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

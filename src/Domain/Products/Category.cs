@@ -4,11 +4,11 @@ namespace IWantApp.Domain.Products;
 
 public class Category : Entity
 {
-    public Category(string name, string createdBy, string editedBy)
+    public Category(string name, string createdBy)
     {
         Name = name;
         CreatedBy = createdBy;
-        EditedBy = editedBy;
+        EditedBy = createdBy;
         CreatedOn = DateTime.Now;
         EditedOn = DateTime.Now;
         Active = true;
@@ -19,13 +19,12 @@ public class Category : Entity
     public string Name { get; private set; }
     public bool Active { get; private set; }
 
-
     public void Validate()
     {
-        var contract = new Contract<Category>();
-        contract.IsNotNullOrEmpty(Name, "Name");
-        contract.IsNotNull(EditedBy, "EditedBy");
-        contract.IsNotNull(CreatedBy, "CreatedBy");
+        var contract = new Contract<Category>()
+            .IsNotNullOrEmpty(Name, "Name")
+            .IsNotNull(EditedBy, "EditedBy")
+            .IsNotNull(CreatedBy, "CreatedBy");
 
         AddNotifications(contract);
     }

@@ -1,4 +1,5 @@
 ﻿using IWantApp.Domain.Infra.Data;
+using IWantApp.Endpoints.Categories.DTO;
 
 namespace IWantApp.Endpoints.Categories;
 
