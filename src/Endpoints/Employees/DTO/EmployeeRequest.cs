@@ -1,4 +1,4 @@
-namespace IWantApp.Endpoints.Employees;
+namespace IWantApp.Endpoints.Employees.DTO;
 
 public record EmployeeRequest(
     string Email,

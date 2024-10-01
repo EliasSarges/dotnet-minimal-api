@@ -122,6 +122,7 @@ app.MapMethods(EmployeePost.Template, EmployeePost.Methods, EmployeePost.Handle)
 app.MapMethods(EmployeeGetAll.Template, EmployeeGetAll.Methods, EmployeeGetAll.Handle);
 app.MapMethods(TokenPost.Template, TokenPost.Methods, TokenPost.Handle);
 app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
+app.MapMethods(ProductGet.Template, ProductGet.Methods, ProductGet.Handle);
 
 app.UseExceptionHandler("/error");
 app.Map("/error", (HttpContext httpContext) => Results.Problem("Internal Server Error", statusCode: 500));

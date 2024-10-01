@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using IWantApp.Endpoints.Employees.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 

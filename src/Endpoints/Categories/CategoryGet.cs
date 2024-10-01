@@ -9,7 +9,7 @@ public class CategoryGet
     public static string[] Methods => new[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(ApplicationDbContext context)
+    private static IResult Action(ApplicationDbContext context)
     {
         var categories = context.Categories
             .ToList();
