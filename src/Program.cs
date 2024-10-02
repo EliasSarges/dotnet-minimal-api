@@ -6,7 +6,9 @@ using IWantApp.Endpoints.Products;
 using IWantApp.Endpoints.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -125,6 +127,24 @@ app.MapMethods(ProductPost.Template, ProductPost.Methods, ProductPost.Handle);
 app.MapMethods(ProductGet.Template, ProductGet.Methods, ProductGet.Handle);
 
 app.UseExceptionHandler("/error");
-app.Map("/error", (HttpContext httpContext) => Results.Problem("Internal Server Error", statusCode: 500));
+app.Map("/error", (HttpContext httpContext) =>
+{
+    var error = httpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+    switch (error)
+    {
+        case null:
+            return Results.Problem("Internal Server Error", statusCode: 500);
+
+        case SqlException:
+            return Results.Problem("Database is out", statusCode: 500);
+
+        case BadHttpRequestException:
+            return Results.Problem("Error to convert data to other type. See all information sent", statusCode: 500);
+
+        default:
+            return Results.Problem("Internal Server Error", statusCode: 500);
+    }
+});
 
 app.Run();
