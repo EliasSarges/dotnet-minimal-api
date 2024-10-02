@@ -33,7 +33,7 @@ public static class ProductPost
         }
 
         var product = new Product(
-            request.Name, category, request.Description, request.HasStock, userId
+            request.Name, category, request.Description, request.price, request.HasStock, userId
         );
 
         if (!product.IsValid)

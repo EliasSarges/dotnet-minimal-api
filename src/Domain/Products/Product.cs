@@ -5,7 +5,7 @@ namespace IWantApp.Domain.Products;
 public class Product : Entity
 {
     public Product(string name, Category category,
-        string description, bool hasStock, string createdBy)
+        string description, decimal price, bool hasStock, string createdBy)
     {
         Name = name;
         Category = category;
@@ -16,6 +16,7 @@ public class Product : Entity
         CreatedOn = DateTime.Now;
         EditedOn = DateTime.Now;
         CategoryId = category.Id;
+        Price = price;
 
         Validate();
     }
@@ -30,6 +31,7 @@ public class Product : Entity
     public Guid CategoryId { get; private set; }
     public Category Category { get; private set; }
     public bool Active { get; private set; } = true;
+    public decimal Price { get; private set; }
 
     public void Validate()
     {

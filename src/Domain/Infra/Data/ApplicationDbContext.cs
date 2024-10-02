@@ -29,6 +29,11 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             .Property(p => p.Name)
             .IsRequired();
 
+        builder.Entity<Product>()
+            .Property(p => p.Price)
+            .HasPrecision(10, 2)
+            .IsRequired();
+
         builder.Entity<Category>()
             .Property(p => p.Name)
             .IsRequired();
