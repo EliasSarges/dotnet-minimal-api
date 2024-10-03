@@ -17,7 +17,7 @@ public class ProductGetShowcase
         if (rows > 10)
             return Results.Problem(title: "Row count must be max 10", statusCode: 400);
 
-        var query = dbContext.Products.Include(p => p.Category)
+        var query = dbContext.Products.AsNoTracking().Include(p => p.Category)
             .Where(p => p.HasStock && p.Category.Active);
 
         switch (orderBy)
