@@ -1,5 +1,4 @@
 using IWantApp.Domain.Infra.Data;
-using IWantApp.Endpoints.Categories.DTO;
 using IWantApp.Endpoints.Products.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +23,12 @@ public class ProductGet
             return Results.NotFound();
 
         var category = product.Category;
-        var categoryResponse = new CategoryResponse(category.Id, category.Name, category.Active);
 
         var productResponse = new ProductResponse(product.Id,
             product.Name,
             product.Description,
-            categoryResponse,
+            category.Name,
+            product.Price,
             product.Active,
             product.HasStock);
 
