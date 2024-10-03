@@ -16,7 +16,7 @@ public class TokenPost
 
     [AllowAnonymous]
     public static async Task<IResult> Action(LoginRequest request, UserManager<IdentityUser> userManager,
-        IConfiguration configuration, ILogger<TokenPost> logger)
+        IConfiguration configuration, ILogger<TokenPost> logger, IWebHostEnvironment environment)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
@@ -36,6 +36,10 @@ public class TokenPost
         });
         subject.AddClaims(claims);
 
+        var expires = environment.IsDevelopment() || environment.IsStaging()
+            ? DateTime.UtcNow.AddYears(1)
+            : DateTime.UtcNow.AddSeconds(3600);
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = subject,
@@ -43,9 +47,7 @@ public class TokenPost
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Audience = configuration["JwtBearerTokenSettings:Audience"],
             Issuer = configuration["JwtBearerTokenSettings:Issuer"],
-            Expires = DateTime.UtcNow.AddSeconds(
-                Convert.ToDouble(configuration["JwtBearerTokenSettings:ExpiryTimeSeconds"])
-            )
+            Expires = expires
         };
 
         var tokenHandler = new JwtSecurityTokenHandler();
